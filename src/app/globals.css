@@ -1,26 +1,50 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	--background: #f8faff;
+	--blue: #27129c;
+	--foreground: #171717;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	--color-background: var(--background);
+	--color-blue: var(--blue);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-pt-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	margin: 0;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.bg-grid {
+	background-image:
+		linear-gradient(to right, rgba(39, 18, 156, 0.07) 1px, transparent 1px),
+		linear-gradient(to bottom, rgba(39, 18, 156, 0.07) 1px, transparent 1px);
+	background-size: 40px 40px;
+	mask-image: linear-gradient(to bottom, black 0%, black 65%, transparent 100%);
+}
+
+@layer components {
+	.btn-primary {
+		@apply rounded bg-blue px-4 py-1.5;
+    @apply text-background;
+		@apply transition-opacity hover:opacity-60;
+	}
+
+  .btn-secondary {
+		@apply rounded px-4 py-1.5 border border-foreground/20 bg-background/50;
+		@apply transition-all hover:border-foreground/50 hover:bg-foreground/5;
+	}
 }
