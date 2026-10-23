@@ -36,30 +36,20 @@ export default async function Home() {
             </a>
           </div>
 
-          { user?.email ? (
-            <div className="flex items-center gap-3">
-              <Link
-                href="/profile"
-                className="btn-primary"
-              >
-                Profile
-              </Link>
-            </div>
+          { user ? (
+            <Link
+              href="/profile"
+              className="btn-primary"
+            >
+              Profile
+            </Link>
           ) : (
-            <div className="flex items-center gap-3">
-              <Link
-                href="/auth"
-                className="btn-secondary"
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/experiments"
-                className="btn-primary"
-              >
-                Get started
-              </Link>
-            </div>
+            <Link
+              href="/auth"
+              className="btn-primary"
+            >
+              Get started
+            </Link>
           )}
         </nav>
       </header>
@@ -82,12 +72,21 @@ export default async function Home() {
           >
             Start exploring
           </Link>
-          <Link
-            href="/auth"
-            className="btn-secondary"
-          >
-            Sign in to your account
-          </Link>
+          { user ? (
+            <Link
+              href="/dashboard"
+              className="btn-secondary"
+            >
+              My space
+            </Link>
+          ) : (
+            <Link
+              href="/auth"
+              className="btn-secondary"
+            >
+              Sign in to your account
+            </Link>
+          )}
         </div>
       </section>
     </main>
