@@ -1,7 +1,11 @@
-
+import { appwrite } from "@/lib/appwrite";
+import { createNextServerHelpers } from "@appwrite.io/react/server/next";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const helpers = createNextServerHelpers(appwrite);
+  const user = await helpers.getLoggedInUser();
+
   return (
     <main className="relative min-h-dvh overflow-hidden bg-background text-foreground">
       <div
@@ -32,20 +36,31 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Link
-              href="/signin"
-              className="btn-secondary"
-            >
-              Sign in
-            </Link>
-            <Link
-              href="/experiments"
-              className="btn-primary"
-            >
-              Get started
-            </Link>
-          </div>
+          { user?.email ? (
+            <div className="flex items-center gap-3">
+              <Link
+                href="/profile"
+                className="btn-primary"
+              >
+                Profile
+              </Link>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <Link
+                href="/auth"
+                className="btn-secondary"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/experiments"
+                className="btn-primary"
+              >
+                Get started
+              </Link>
+            </div>
+          )}
         </nav>
       </header>
 
@@ -68,7 +83,7 @@ export default function Home() {
             Start exploring
           </Link>
           <Link
-            href="/signin"
+            href="/auth"
             className="btn-secondary"
           >
             Sign in to your account
