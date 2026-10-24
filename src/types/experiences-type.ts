@@ -1,0 +1,1 @@
+export type ExperienceType = "projectile_motion" | "free_fall";

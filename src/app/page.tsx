@@ -1,3 +1,4 @@
+import HomeHeader from "@/components/home-header";
 import { appwrite } from "@/lib/appwrite";
 import { createNextServerHelpers } from "@appwrite.io/react/server/next";
 import Link from "next/link";
@@ -17,44 +18,9 @@ export default async function Home() {
         <div className="absolute left-1/2 top-[-180px] h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-blue-300/15 blur-[120px]" />
       </div>
 
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-foreground/10 bg-background/75 backdrop-blur-md">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between py-4 px-6 lg:px-10">
-          <Link
-            href="/"
-            className="px-3 py-1.5 rounded transition-all hover:bg-foreground/20 font-bold text-lg"
-            aria-label="What If Lab"
-          >
-              What if <span className="text-blue">lab.</span>
-          </Link>
+      <HomeHeader user={ user } />
 
-          <div className="flex items-center gap-8 font-medium">
-            <a href="#about" className="transition hover:text-blue">
-              About
-            </a>
-            <a href="#how-it-works" className="transition hover:text-blue">
-              How it works
-            </a>
-          </div>
-
-          { user ? (
-            <Link
-              href="/profile"
-              className="btn-primary"
-            >
-              Profile
-            </Link>
-          ) : (
-            <Link
-              href="/auth"
-              className="btn-primary"
-            >
-              Get started
-            </Link>
-          )}
-        </nav>
-      </header>
-
-      <section className="relative z-10 mx-auto flex min-h-dvh max-w-5xl flex-col items-center justify-center px-6 pt-28 pb-16 text-center">
+      <section className="relative z-10 mx-auto flex min-h-dvh max-w-5xl flex-col items-center justify-center px-6 lg:px-0 pt-28 pb-16 text-center">
         <h1 className="max-w-4xl text-5xl font-bold leading-[1.08] tracking-tight sm:text-6xl lg:text-8xl">
           What if{" "}
           <span className="text-blue">you could</span>
@@ -67,7 +33,7 @@ export default async function Home() {
 
         <div className="mt-10 flex w-full flex-col justify-center gap-4 sm:w-auto sm:flex-row">
           <Link
-            href="/experiments"
+            href="/guest"
             className="btn-primary"
           >
             Start exploring
