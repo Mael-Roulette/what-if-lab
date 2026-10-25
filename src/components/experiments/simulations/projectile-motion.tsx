@@ -4,9 +4,9 @@ import {
   animateProjectile,
   DEFAULT_PARAMS,
   type ProjectileParams,
-} from "@/lib/physics/projectileMotion";
+} from "@/lib/physics/projectile-motion";
 import { useEffect, useRef, useState } from "react";
-import ProjectileParameters from "./ProjectileParameters";
+import ProjectileParameters from "./projectile-parameters";
 
 export default function ProjectileMotion() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -43,7 +43,7 @@ export default function ProjectileMotion() {
         onClick={() => setRun((r) => ({ params: { ...params }, id: r.id + 1 }))}
         className="btn-primary w-fit"
       >
-        Jouer l&apos;animation
+        Play
       </button>
 
       <canvas ref={canvasRef} width={1200} height={600} className="w-full rounded-lg" />

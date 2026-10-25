@@ -1,5 +1,5 @@
 import { ExperienceType } from "@/types";
-import ProjectileMotion from "./simulations/ProjectileMotion";
+import ProjectileMotion from "./simulations/projectile-motion";
 
 type ExperimentViewerProps = {
   experienceType: ExperienceType;

@@ -1,5 +1,5 @@
 import HomeHeader from "@/components/home-header";
-import { appwrite } from "@/lib/appwrite";
+import { appwrite } from "@/lib/appwrite/config";
 import { createNextServerHelpers } from "@appwrite.io/react/server/next";
 import Link from "next/link";
 
@@ -20,8 +20,8 @@ export default async function Home() {
 
       <HomeHeader user={ user } />
 
-      <section className="relative z-10 mx-auto flex min-h-dvh max-w-5xl flex-col items-center justify-center px-6 lg:px-0 pt-28 pb-16 text-center">
-        <h1 className="max-w-4xl text-5xl font-bold leading-[1.08] tracking-tight sm:text-6xl lg:text-8xl">
+      <section className="relative z-10 mx-auto flex min-h-dvh max-w-5xl flex-col items-center  px-6 lg:px-0 pt-22 pb-8 text-center">
+        <h1 className="max-w-4xl text-5xl font-bold leading-[1.08] tracking-tight mt-auto sm:text-6xl lg:text-8xl">
           What if{" "}
           <span className="text-blue">you could</span>
           <br />
@@ -54,6 +54,7 @@ export default async function Home() {
             </Link>
           )}
         </div>
+        <p className="mt-auto text-sm text-foreground/50 font-bold">Built for the Appwrite Hackathon with 💜 by Maël Roulette</p>
       </section>
     </main>
   );

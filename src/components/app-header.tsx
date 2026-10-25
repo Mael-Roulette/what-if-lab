@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { SignOutButton } from "./sign-out-button";
 
 export function AppHeader() {
   return (
     <header className="border-b border-foreground/10 bg-background/75 backdrop-blur-md">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-0">
         <Link
           href="/dashboard"
           className="rounded px-3 py-1.5 text-lg font-bold transition-all hover:bg-foreground/20"
@@ -14,16 +13,15 @@ export function AppHeader() {
         </Link>
 
         <div className="flex items-center gap-6 font-medium">
-          <Link href="/dashboard" className="transition hover:text-blue">
+          <Link href="/dashboard" className="link">
             Dashboard
           </Link>
-          <Link href="/experiments" className="transition hover:text-blue">
+          <Link href="/experiments" className="link">
             Experiments
           </Link>
-          <Link href="/profile" className="transition hover:text-blue">
+          <Link href="/profile" className="btn-primary">
             Profile
           </Link>
-          <SignOutButton />
         </div>
       </nav>
     </header>

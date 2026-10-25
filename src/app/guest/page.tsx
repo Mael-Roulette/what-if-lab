@@ -1,6 +1,6 @@
-import ExperimentViewer from "@/components/experiments/ExperimentViewer";
+import ExperimentViewer from "@/components/experiments/experiment-viewer";
 import HomeHeader from "@/components/home-header";
-import { appwrite } from "@/lib/appwrite";
+import { appwrite } from "@/lib/appwrite/config";
 import { createNextServerHelpers } from "@appwrite.io/react/server/next";
 
 export default async function GuestPage () {

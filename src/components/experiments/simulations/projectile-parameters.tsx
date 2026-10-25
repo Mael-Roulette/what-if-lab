@@ -1,6 +1,6 @@
 "use client";
 
-import type { ProjectileParams } from "@/lib/physics/projectileMotion";
+import type { ProjectileParams } from "@/lib/physics/projectile-motion";
 
 type Props = {
   params: ProjectileParams;

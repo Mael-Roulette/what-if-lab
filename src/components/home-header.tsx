@@ -27,12 +27,20 @@ export default function HomeHeader ( { user }: HomeHeaderProps ) {
           </div>
 
           { user ? (
-            <Link
-              href="/profile"
-              className="btn-primary"
-            >
-              Profile
-            </Link>
+            <div className="flex items-center gap-6">
+              <Link
+                href="/dashboard"
+                className="link"
+              >
+                My space
+              </Link>
+              <Link
+                href="/profile"
+                className="btn-primary"
+              >
+                Profile
+              </Link>
+            </div>
           ) : (
             <Link
               href="/auth"

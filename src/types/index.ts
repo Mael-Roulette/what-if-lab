@@ -1,1 +1,2 @@
-export * from "./experiences-type";
+export * from "./experiment-types";
+export * from "./experiment-parameters";
