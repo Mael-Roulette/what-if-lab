@@ -36,7 +36,7 @@ export default async function ProfilePage() {
         ))}
       </dl>
       <div className="flex justify-end gap-2 mt-4">
-        <Link href="admin-8454387213" className="btn-secondary">Admin</Link>
+        <Link href="admin" className="btn-secondary">Admin</Link>
         <SignOutButton />
       </div>
     </div>

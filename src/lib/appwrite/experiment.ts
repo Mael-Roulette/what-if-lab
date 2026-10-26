@@ -59,3 +59,29 @@ export const getExperiments = async () => {
     throw error;
   }
 };
+
+export const getExperimentById = async (id: string) => {
+  try {
+    const row = await tablesDB.getRow<ExperimentResponse>({
+      databaseId,
+      tableId: experimentTableId,
+      rowId: id,
+    });
+
+    return JSON.parse(JSON.stringify(row)) as typeof row;
+  } catch (error: unknown) {
+    if (
+      error instanceof AppwriteException &&
+      (error.type === "row_not_found" || Number(error.code) === 404)
+    ) {
+      return null;
+    }
+
+    if (error instanceof AppwriteException) {
+      console.error(error.code, error.message, error.response);
+    } else {
+      console.error(error);
+    }
+    throw error;
+  }
+};

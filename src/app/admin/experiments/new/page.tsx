@@ -2,8 +2,7 @@
 
 import { ExperimentFields, ExperimentSection } from "@/components/experiments/form/experiment-section";
 import { ParametersSection } from "@/components/experiments/form/parameter-section";
-import { createExperiment, createExperimentParameters } from "@/lib/appwrite/experiment";
-import { experimentSchema } from "@/lib/validations/experiment";
+import { useCreateExperiment } from "@/hooks/experiments/use-create-experiment";
 import { ParameterRequest, ParameterType } from "@/types";
 import { ExperimentStatus } from "@/types/experiment";
 import { useState } from "react";
@@ -23,15 +22,18 @@ const emptyParameter = (): ParameterRequest => ({
   unit: "",
 });
 
-export default function CreateExperimentPage() {
+export default function NewExperimentPage() {
   const [fields, setFields] = useState<ExperimentFields>(initialFields);
   const [parameters, setParameters] = useState<ParameterRequest[]>([
     emptyParameter(),
   ]);
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState("");
+  const {
+    submitExperiment,
+    errors,
+    isSubmitting,
+    message,
+  } = useCreateExperiment();
 
   function updateField<K extends keyof ExperimentFields>(
     field: K,
@@ -62,48 +64,12 @@ export default function CreateExperimentPage() {
 
   async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMessage("");
 
-    // Ignore completely empty parameter rows
-    const filledParameters = parameters.filter((p) => p.name.trim());
+    const success = await submitExperiment(fields, parameters);
 
-    const result = experimentSchema.safeParse({
-      ...fields,
-      parameters: filledParameters,
-    });
-
-    if (!result.success) {
-      const fieldErrors: Record<string, string> = {};
-      for (const issue of result.error.issues) {
-        const key = issue.path.join(".");
-        if (!fieldErrors[key]) fieldErrors[key] = issue.message;
-      }
-      setErrors(fieldErrors);
-      return;
-    }
-
-    setErrors({});
-    setIsSubmitting(true);
-
-    try {
-      const { parameters: validParameters, ...experimentData } = result.data;
-
-      const experiment = await createExperiment(experimentData);
-
-      await Promise.all(
-        validParameters.map((parameter) =>
-          createExperimentParameters(parameter, experiment.id)
-        )
-      );
-
+    if (success) {
       setFields(initialFields);
       setParameters([emptyParameter()]);
-      setMessage("Experiment created successfully.");
-    } catch (error) {
-      console.error(error);
-      setMessage("Failed to create experiment.");
-    } finally {
-      setIsSubmitting(false);
     }
   }
 

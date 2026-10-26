@@ -22,7 +22,7 @@ export default function ExperimentCard({
   const style = STATUS_STYLES[experiment.status as ExperimentStatus];
 
   return (
-    <Link href="#" className="flex h-full flex-col rounded-xl border border-blue/30 bg-blue/10 p-4 transition-all hover:border-blue/60 hover:bg-blue/20">
+    <Link href={`/admin/experiments/${experiment.$id}`} className="flex h-full flex-col rounded-xl border border-blue/30 bg-blue/10 p-4 transition-all hover:border-blue/60 hover:bg-blue/20">
       <div className="flex items-center justify-between gap-3">
         <h3 className="line-clamp-1 font-bold text-lg">{experiment.title}</h3>
         <span

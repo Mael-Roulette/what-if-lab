@@ -5,7 +5,7 @@ export function AdminHeader() {
     <header className="border-b border-foreground/10 bg-background/75 backdrop-blur-md">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-0">
         <Link
-          href="/admin-8454387213"
+          href="/admin"
           className="rounded px-3 py-1.5 text-lg font-bold transition-all hover:bg-foreground/20"
           aria-label="What If Lab"
         >

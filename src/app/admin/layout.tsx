@@ -1,9 +1,6 @@
 import { AdminHeader } from "@/components/admin-header";
-import { requireAdmin } from "@/lib/appwrite/auth";
 
-export default async function AdminLayout({ children }: LayoutProps<"/">) {
-  await requireAdmin();
-
+export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <AdminHeader />
