@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/loading";
 import { useExperiment } from "@/hooks/experiments/use-experiments";
 import { ExperimentStatus } from "@/types/experiment";
 import Link from "next/link";
@@ -30,7 +31,7 @@ export default function ExperimentPage() {
     getExperimentById(id);
   }, [id, getExperimentById]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading />;
   if (error) return <p role="alert">{error}</p>;
   if (!experiment) notFound();
 

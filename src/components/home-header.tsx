@@ -1,11 +1,7 @@
-import { Models } from "appwrite";
+import { SessionUser } from "@/types/user";
 import Link from "next/link";
 
-type HomeHeaderProps = {
-  user: Models.User<Models.Preferences> | null;
-};
-
-export default function HomeHeader ( { user }: HomeHeaderProps ) {
+export default function HomeHeader ( { user }: { user: SessionUser} ) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-foreground/10 bg-background/75 backdrop-blur-md">
         <nav className="mx-auto flex max-w-7xl items-center justify-between py-4 px-6 lg:px-0">

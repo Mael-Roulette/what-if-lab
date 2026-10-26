@@ -1,11 +1,14 @@
-import HomeHeader from "@/components/home-header";
-import { appwrite } from "@/lib/appwrite/config";
-import { createNextServerHelpers } from "@appwrite.io/react/server/next";
-import Link from "next/link";
+"use client"
 
-export default async function Home() {
-  const helpers = createNextServerHelpers(appwrite);
-  const user = await helpers.getLoggedInUser();
+import HomeHeader from "@/components/home-header";
+import { useAuth } from "@/hooks/auth/use-auth";
+import Link from "next/link";
+import Loading from "./loading";
+
+export default function Home() {
+  const { user, isLoading: authLoading } = useAuth();
+
+  if (authLoading || !user) return <Loading />;
 
   return (
     <main className="relative min-h-dvh overflow-hidden bg-background text-foreground">

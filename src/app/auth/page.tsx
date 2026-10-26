@@ -9,6 +9,7 @@ import {
   signUpSchema,
   type FieldErrors,
 } from "@/lib/validations/user";
+import Loading from "../loading";
 
 export default function Auth() {
   const { user, isLoading, signIn, signUp, error } = useAuth();
@@ -62,11 +63,7 @@ export default function Auth() {
   }, [user, router]);
 
   if (isLoading) {
-    return (
-      <main className="flex min-h-dvh items-center justify-center bg-background text-foreground">
-        <p>Loading...</p>
-      </main>
-    );
+    return <Loading />;
   }
 
   const inputClass =
@@ -82,7 +79,6 @@ export default function Auth() {
         <div className="absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-blue-300/15 blur-[120px]" />
       </div>
 
-      {/* Authentication form */}
       <div className="relative z-10 w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold">

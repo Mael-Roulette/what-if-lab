@@ -7,6 +7,7 @@ import { ExperimentStatus } from "@/types/experiment";
 import { countByStatus } from "@/utils/experiment";
 import Link from "next/link";
 import { useEffect } from "react";
+import Loading from "../loading";
 
 const CREATE_HREF = "/admin/experiments/new";
 
@@ -32,7 +33,7 @@ export default function AdminPage() {
     getAllExperiments();
   }, [getAllExperiments]);
 
-  if (authLoading || !user) return <p>Loading...</p>;
+  if (authLoading || !user) return <Loading />;
 
   const ready = !isLoading && !error;
 
