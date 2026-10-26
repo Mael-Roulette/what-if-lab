@@ -62,7 +62,7 @@ export default function NewExperimentPage() {
     );
   }
 
-  async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const success = await submitExperiment(fields, parameters);

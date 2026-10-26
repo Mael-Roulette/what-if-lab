@@ -4,12 +4,14 @@ export type QuestionRequest = {
   question: string;
   correctAnswer: string;
   explanation: string;
-  point: number;
+  points: number;
+  experimentId: string;
 }
 
 export interface QuestionResponse extends Models.Row {
   question: string;
   correctAnswer: string;
   explanation: string;
-  point: number;
+  points: number;
+  experimentId: string;
 }

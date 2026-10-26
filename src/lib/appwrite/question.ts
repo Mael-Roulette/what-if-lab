@@ -15,18 +15,39 @@ if (!databaseId || !questionTableId) {
 }
 
 export const createQuestion = async (
-  request: QuestionRequest,
-  experimentId: string
+  request: QuestionRequest
 ) => {
   await tablesDB.createRow({
     databaseId,
     tableId: questionTableId,
     rowId: ID.unique(),
-    data: { ...request, experimentId },
+    data: request,
     permissions: [Permission.read(Role.users())],
   });
 
   return { ok: true };
+}
+
+export const updateQuestion = async (
+  questionId: string,
+  request: QuestionRequest
+) => {
+  await tablesDB.updateRow({
+    databaseId,
+    tableId: questionTableId,
+    rowId: questionId,
+    data: request
+  })
+}
+
+export const deleteQuestion = async (
+  questionId: string
+) => {
+  await tablesDB.deleteRow({
+    databaseId,
+    tableId: questionTableId,
+    rowId: questionId
+  })
 }
 
 export const getQuestions = async () => {
@@ -46,3 +67,29 @@ export const getQuestions = async () => {
     throw error;
   }
 };
+
+export const getQuestionById = async (id: string) => {
+  try {
+    const row = await tablesDB.getRow<QuestionResponse>({
+      databaseId,
+      tableId: questionTableId,
+      rowId: id,
+    });
+
+    return JSON.parse(JSON.stringify(row)) as typeof row;
+  } catch (error: unknown) {
+    if (
+      error instanceof AppwriteException &&
+      (error.type === "row_not_found" || Number(error.code) === 404)
+    ) {
+      return null;
+    }
+
+    if (error instanceof AppwriteException) {
+      console.error(error.code, error.message, error.response);
+    } else {
+      console.error(error);
+    }
+    throw error;
+  }
+}

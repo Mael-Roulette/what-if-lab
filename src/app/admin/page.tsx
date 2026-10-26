@@ -7,7 +7,6 @@ import { ExperimentStatus } from "@/types/experiment";
 import { countByStatus } from "@/utils/experiment";
 import Link from "next/link";
 import { useEffect } from "react";
-import Loading from "../loading";
 
 const CREATE_HREF = "/admin/experiments/new";
 
@@ -33,7 +32,7 @@ export default function AdminPage() {
     getAllExperiments();
   }, [getAllExperiments]);
 
-  if (authLoading || !user) return <Loading />;
+  if (authLoading || !user) return <p>Loading...</p>;
 
   const ready = !isLoading && !error;
 
@@ -53,15 +52,18 @@ export default function AdminPage() {
         <h1 className="leading-none">Welcome {user.name}!</h1>
       </div>
 
-      <section className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
-        <Stat label="Total" value={experiments.length} />
-        {STATS.map(({ label, status }) => (
-          <Stat key={status} label={label} value={countByStatus(experiments, status)} />
-        ))}
+      <section className="mt-3 flex flex-col">
+        <h2 className="mb-3">Experiments stats</h2>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <Stat label="Total" value={experiments.length} />
+          {STATS.map(({ label, status }) => (
+            <Stat key={status} label={label} value={countByStatus(experiments, status)} />
+          ))}
+        </div>
       </section>
 
       <section className="mt-6">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <h2>Experiments</h2>
             {ready && (
@@ -80,12 +82,12 @@ export default function AdminPage() {
         ) : error ? (
           <p role="alert">{error}</p>
         ) : experiments.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-blue/40 px-6 py-14 text-center">
-            <p className="font-medium">No experiments yet</p>
-            <p className="max-w-xs text-sm opacity-70">
+          <div className="flex flex-col items-center rounded-xl border border-dashed bg-foreground/10 border-blue/40 px-6 py-14 mt-6 text-center">
+            <p className="font-bold text-lg">No experiments yet</p>
+            <p className="opacity-70">
               Create your first experiment to start collecting results.
             </p>
-            <Link href={CREATE_HREF} className="btn-primary">
+            <Link href={CREATE_HREF} className="btn-primary mt-5">
               Create experiment
             </Link>
           </div>

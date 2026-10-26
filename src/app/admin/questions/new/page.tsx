@@ -1,61 +1,85 @@
 "use client"
 
-import { FormField } from "@/components/form/form-field"
+import QuestionForm from "@/components/questions/form/question-form";
+import { useExperiment } from "@/hooks/experiments/use-experiments";
+import { useCreateQuestion } from "@/hooks/questions/use-create-question";
+import { QuestionRequest } from "@/types";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+const initialFields: QuestionRequest = {
+  question: "",
+  correctAnswer: "",
+  explanation: "",
+  points: 0,
+  experimentId: "",
+};
 
 export default function NewQuestionPage() {
-  const handleSubmit = () => {
-    // TODO : Handle question creation
+  const { experiments, isLoading: experimentLoading, error: experimentError, getAllExperiments } = useExperiment();
+  const [fields, setFields] = useState<QuestionRequest>(initialFields);
+  const { submitQuestion, errors: questionErrors, message, isSubmitting } = useCreateQuestion();
+
+  useEffect(() => {
+    getAllExperiments();
+  }, [getAllExperiments]);
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type } = event.target;
+
+    setFields((prev) => ({
+      ...prev,
+      [name]: type === "number" ? (value === "" ? 0 : Number(value)) : value,
+    }));
+  };
+
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const success = await submitQuestion(fields);
+
+    if (success) {
+      setFields(initialFields);
+    }
+  };
+
+  if (experimentLoading) {
+    return (
+      <div>
+        <h1 className="mb-6">Add a question</h1>
+        <p>Form loading...</p>
+      </div>
+    );
+  }
+
+  if (experimentError) {
+    return (
+      <div>
+        <h1 className="mb-6">Add a question</h1>
+        <p>An error occurred...</p>
+        <p>{experimentError}</p>
+      </div>
+    );
   }
 
   return (
     <div>
-      <h1 className="mb-6">Add a question</h1>
+      <Link href="/admin/questions" className="link">
+        Back to questions
+      </Link>
+      <h1 className="mb-6 mt-3">Add a question</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-4 rounded-xl border border-foreground/15 bg-white/60 p-6">
-          <FormField label="Question" htmlFor="question">
-            <input
-              type="text"
-              id="question"
-              placeholder="Does the distance change if the gravity is doubled ? (yes/no)"
-              className="w-full"
-            />
-          </FormField>
-
-          <FormField label="Answer" htmlFor="answer">
-            <input
-              type="text"
-              id="answer"
-              placeholder="Yes"
-              className="w-full"
-            />
-          </FormField>
-
-          <FormField label="Explanation" htmlFor="explanation">
-            <textarea
-              id="explanation"
-              placeholder="It's because..."
-              className="w-full"
-            />
-          </FormField>
-
-          <FormField label="Point" htmlFor="point">
-            <input
-              type="number"
-              id="point"
-              placeholder="20"
-            />
-          </FormField>
-
-          {/* TODO : Add experiment selection field */}
-        </div>
-
-        <div className="flex flex-col items-end gap-4">
-          <button type="submit" className="btn-primary">
-            Add question
-          </button>
-        </div>
-      </form>
+      <QuestionForm
+        fields={fields}
+        experiments={experiments}
+        questionErrors={questionErrors}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        message={message}
+        isSubmitting={isSubmitting}
+      />
     </div>
-  )
+  );
 }

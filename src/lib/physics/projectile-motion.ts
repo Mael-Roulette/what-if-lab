@@ -24,7 +24,6 @@ export function calculatePosition(t: number, { speed, angle, gravity }: Projecti
 }
 
 type AnimateOptions = {
-  /** false : affiche seulement la scène (boule au point de départ) sans lancer l'animation */
   autoplay?: boolean;
 };
 
