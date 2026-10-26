@@ -25,6 +25,7 @@ export function calculatePosition(t: number, { speed, angle, gravity }: Projecti
 
 type AnimateOptions = {
   autoplay?: boolean;
+  onFinish?: () => void;
 };
 
 export function animateProjectile(
@@ -33,7 +34,7 @@ export function animateProjectile(
   height: number,
   skyHeight: number,
   params: ProjectileParams,
-  { autoplay = true }: AnimateOptions = {}
+  { autoplay = true, onFinish }: AnimateOptions = {}
 ): () => void {
   let startTime: number | null = null;
   let animationId = 0;
@@ -182,7 +183,10 @@ export function animateProjectile(
     const elapsed = Math.min((timestamp - startTime) / 1000, flightTime);
     drawFrame(elapsed);
 
-    if (elapsed >= flightTime) return; // atterri
+    if (elapsed >= flightTime) {
+      onFinish?.(); // landed
+      return;
+    }
     animationId = requestAnimationFrame(animate);
   }
 

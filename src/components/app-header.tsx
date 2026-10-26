@@ -19,6 +19,9 @@ export function AppHeader() {
           <Link href="/experiments" className="link">
             Experiments
           </Link>
+          <Link href="/leaderboard" className="link">
+            Leaderboard
+          </Link>
           <Link href="/profile" className="btn-primary">
             Profile
           </Link>

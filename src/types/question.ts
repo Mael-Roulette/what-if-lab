@@ -11,7 +11,15 @@ export type QuestionRequest = {
 export interface QuestionResponse extends Models.Row {
   question: string;
   correctAnswer: string;
+  options: string[];
   explanation: string;
   points: number;
   experimentId: string;
 }
+
+export type PlayerQuestion = {
+  id: string;
+  question: string;
+  points: number;
+  options: string[];
+};

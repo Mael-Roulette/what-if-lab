@@ -1,8 +1,8 @@
 "use server";
 
 import { tablesDB } from "./appwrite";
-import { AppwriteException, ID, Permission, Role } from "node-appwrite";
-import { QuestionRequest, QuestionResponse } from "@/types";
+import { AppwriteException, ID, Permission, Query, Role } from "node-appwrite";
+import { PlayerQuestion, QuestionRequest, QuestionResponse } from "@/types";
 
 const databaseId = process.env.NEXT_PUBLIC_DATABASE_ID;
 const questionTableId = process.env.NEXT_PUBLIC_QUESTION_TABLE_ID;
@@ -93,3 +93,30 @@ export const getQuestionById = async (id: string) => {
     throw error;
   }
 }
+
+function shuffle<T>(items: T[]): T[] {
+  const a = [...items];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+export const getQuestionsForExperiment = async (
+  experimentId: string
+): Promise<PlayerQuestion[]> => {
+  const result = await tablesDB.listRows<QuestionResponse>({
+    databaseId,
+    tableId: questionTableId,
+    queries: [Query.equal("experimentId", experimentId), Query.limit(25)],
+  });
+
+  // No correctAnswer, no explanation. Shuffled so the right one isn't always first.
+  return result.rows.map((q) => ({
+    id: q.$id,
+    question: q.question,
+    points: q.points,
+    options: shuffle(q.options),
+  }));
+};
