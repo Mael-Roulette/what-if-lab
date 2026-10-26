@@ -8,7 +8,7 @@ import Loading from "./loading";
 export default function Home() {
   const { user, isLoading: authLoading } = useAuth();
 
-  if (authLoading || !user) return <Loading />;
+  if (authLoading) return <Loading />;
 
   return (
     <main className="relative min-h-dvh overflow-hidden bg-background text-foreground">
