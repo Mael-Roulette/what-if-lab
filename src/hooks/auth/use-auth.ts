@@ -20,7 +20,6 @@ export function useAuth({ admin = false }: { admin?: boolean } = {}) {
         if (cancelled) return;
 
         if (!result) {
-          router.replace("/auth");
           return;
         }
         if (admin && !result.labels.includes("admin")) {

@@ -1,4 +1,5 @@
 import { Models } from "appwrite";
+import { ExperimentType } from ".";
 
 export type ExperimentRequest = {
   title: string;
@@ -15,4 +16,5 @@ export interface ExperimentResponse extends Models.Row {
   title: string;
   description: string;
   status: ExperimentStatus;
+  type: ExperimentType
 }

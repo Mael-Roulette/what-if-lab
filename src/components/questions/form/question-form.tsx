@@ -76,7 +76,7 @@ export default function QuestionForm (
           <select
             id="experimentId"
             name="experimentId"
-            value={fields.experimentId}
+            value={fields.experimentId || ""}
             onChange={handleChange}
           >
             <option value="" disabled>Select an experiment</option>

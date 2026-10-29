@@ -7,7 +7,15 @@ import { QuestionRequest } from "@/types";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const initialFields: QuestionRequest = {
+type QuestionFormFields = {
+  question: string;
+  correctAnswer: string;
+  explanation: string;
+  points: number;
+  experimentId: string;
+};
+
+const initialFields: QuestionFormFields = {
   question: "",
   correctAnswer: "",
   explanation: "",
@@ -17,7 +25,7 @@ const initialFields: QuestionRequest = {
 
 export default function NewQuestionPage() {
   const { experiments, isLoading: experimentLoading, error: experimentError, getAllExperiments } = useExperiment();
-  const [fields, setFields] = useState<QuestionRequest>(initialFields);
+  const [fields, setFields] = useState<QuestionFormFields>(initialFields);
   const { submitQuestion, errors: questionErrors, message, isSubmitting } = useCreateQuestion();
 
   useEffect(() => {
@@ -38,7 +46,12 @@ export default function NewQuestionPage() {
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const success = await submitQuestion(fields);
+    const request: QuestionRequest = {
+      ...fields,
+      experimentId: fields.experimentId || null,
+    };
+
+    const success = await submitQuestion(request);
 
     if (success) {
       setFields(initialFields);

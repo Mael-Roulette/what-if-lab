@@ -1,1 +1,1 @@
-export type ExperienceType = "projectile_motion" | "free_fall";
+export type ExperimentType = "projectile_motion" | "earth_rotation";

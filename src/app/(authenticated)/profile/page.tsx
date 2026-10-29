@@ -19,7 +19,7 @@ export default async function ProfilePage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">Your profile</h1>
+      <h1>Your profile</h1>
       <p className="mt-1 text-foreground/60">
         Your account details.
       </p>
@@ -36,7 +36,9 @@ export default async function ProfilePage() {
         ))}
       </dl>
       <div className="flex justify-end gap-2 mt-4">
-        <Link href="admin" className="btn-secondary">Admin</Link>
+        { user.labels.includes("admin") &&
+          <Link href="admin" className="btn-secondary">Admin</Link>
+        }
         <SignOutButton />
       </div>
     </div>
