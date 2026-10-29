@@ -120,3 +120,50 @@ export const getQuestionsForExperiment = async (
     options: shuffle(q.options),
   }));
 };
+
+export const getStandaloneQuestions = async (): Promise<PlayerQuestion[]> => {
+  const result = await tablesDB.listRows<QuestionResponse>({
+    databaseId,
+    tableId: questionTableId,
+    queries: [Query.isNull("experimentId"), Query.limit(25)],
+  });
+
+  return result.rows.map((q) => ({
+    id: q.$id,
+    question: q.question,
+    points: q.points,
+    options: shuffle(q.options),
+  }));
+};
+
+export const getPlayerQuestionById = async (
+  id: string
+): Promise<PlayerQuestion | null> => {
+  try {
+    const row = await tablesDB.getRow<QuestionResponse>({
+      databaseId,
+      tableId: questionTableId,
+      rowId: id,
+    });
+
+    // Only standalone questions are playable here.
+    // Questions linked to an experiment go through /experiments/[id].
+    if (row.experimentId) return null;
+
+    return {
+      id: row.$id,
+      question: row.question,
+      points: row.points,
+      options: shuffle(row.options),
+    };
+  } catch (error: unknown) {
+    if (
+      error instanceof AppwriteException &&
+      (error.type === "row_not_found" || Number(error.code) === 404)
+    ) {
+      return null;
+    }
+    console.error(error);
+    throw error;
+  }
+};

@@ -16,6 +16,12 @@ export function AppHeader() {
           <Link href="/dashboard" className="link">
             Dashboard
           </Link>
+          <Link href="/experiments" className="link">
+            Experiments
+          </Link>
+          <Link href="/questions" className="link">
+            Questions
+          </Link>
           <Link href="/leaderboard" className="link">
             Leaderboard
           </Link>

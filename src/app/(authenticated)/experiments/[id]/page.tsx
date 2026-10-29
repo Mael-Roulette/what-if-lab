@@ -34,7 +34,7 @@ export default function ExperimentPage() {
   if (error) return <p role="alert">{error}</p>;
 
   if (!experiment || experiment.status !== "published") notFound();
-  if (!experimentQuestions) return <p>This experiment has no questions yet.</p>;
+  if (experimentQuestions.length === 0) return <p>This experiment has no questions yet.</p>;
 
   return (
     <section className="flex flex-col">

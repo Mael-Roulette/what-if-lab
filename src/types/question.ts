@@ -5,7 +5,7 @@ export type QuestionRequest = {
   correctAnswer: string;
   explanation: string;
   points: number;
-  experimentId: string;
+  experimentId: string | null;
 }
 
 export interface QuestionResponse extends Models.Row {

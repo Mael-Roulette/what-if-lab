@@ -150,30 +150,37 @@ export const getScores = async ({
   }
 };
 
-async function addPoints(userId: string, userName: string, points: number) {
+async function addPoints(userId: string, userName: string, delta: number) {
   try {
     const row = await tablesDB.getRow<UserScoreResponse>({
       databaseId: databaseId!,
       tableId: scoreTableId!,
       rowId: userId,
     });
-    const updated = await tablesDB.updateRow<UserScoreResponse>({
-      databaseId: databaseId!,
-      tableId: scoreTableId!,
-      rowId: userId,
-      data: { userName, score: (row.score ?? 0) + points },
-    });
-    return updated.score;
+    const previous = row.score ?? 0;
+    const next = Math.max(0, previous + delta);
+
+    if (next !== previous) {
+      await tablesDB.updateRow<UserScoreResponse>({
+        databaseId: databaseId!,
+        tableId: scoreTableId!,
+        rowId: userId,
+        data: { userName, score: next },
+      });
+    }
+    return { score: next, applied: next - previous };
   } catch (error) {
     if (!isNotFound(error)) throw error;
+
+    const initial = Math.max(0, delta);
     await tablesDB.createRow({
       databaseId: databaseId!,
       tableId: scoreTableId!,
       rowId: userId,
-      data: { userId, userName, score: points },
+      data: { userId, userName, score: initial },
       permissions: [Permission.read(Role.user(userId))],
     });
-    return points;
+    return { score: initial, applied: initial };
   }
 }
 
@@ -197,13 +204,21 @@ export const submitAnswers = async (
         isCorrect,
         correctAnswer: q.correctAnswer,
         explanation: q.explanation,
-        pointsAwarded: isCorrect ? q.points : 0,
+        pointsAwarded: isCorrect ? q.points : -5,
       };
     })
   );
 
-  const pointsAwarded = results.reduce((sum, r) => sum + r.pointsAwarded, 0);
-  const newScore = pointsAwarded > 0 ? await addPoints(user.$id, user.name, pointsAwarded) : null;
+  const delta = results.reduce((sum, r) => sum + r.pointsAwarded, 0);
+
+  let newScore: number | null = null;
+  let pointsAwarded = 0;
+
+  if (delta !== 0) {
+    const res = await addPoints(user.$id, user.name, delta);
+    newScore = res.score;
+    pointsAwarded = res.applied;
+  }
 
   return { results, pointsAwarded, newScore };
 };

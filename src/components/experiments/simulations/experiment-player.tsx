@@ -8,8 +8,10 @@ import ProjectileMotion from "./projectile-motion";
 import { EarthRotation } from "./earth-rotation";
 
 type Props = {
-  experimentType: ExperimentType;
+  experimentType?: ExperimentType | null;
   questions: PlayerQuestion[];
+  backHref?: string;
+  backLabel?: string;
 };
 
 type Phase = "questions" | "simulation" | "result";
@@ -25,13 +27,14 @@ function Simulation({ type, onFinish }: { type: ExperimentType; onFinish: () => 
   }
 }
 
-export default function ExperimentPlayer({ experimentType, questions }: Props) {
+export default function ExperimentPlayer({ experimentType, questions, backHref, backLabel }: Props) {
   const [phase, setPhase] = useState<Phase>("questions");
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [result, setResult] = useState<SubmitAnswersResult | null>(null);
   const submitted = useRef(false);
   const { submitAnswers, isSubmitting, error } = useScore();
 
+  const hasSimulation = !!experimentType;
   const allAnswered = questions.every((q) => answers[q.id]);
   const totalPoints = questions.reduce((sum, q) => sum + q.points, 0);
 
@@ -55,8 +58,9 @@ export default function ExperimentPlayer({ experimentType, questions }: Props) {
     return (
       <div className="flex max-w-3xl mx-auto flex-col gap-6">
         <p className="text-foreground/60 text-center">
-          Answer every question, then run the simulation to see if you were right
-          (up to {totalPoints} points).
+          {hasSimulation
+            ? `Answer every question, then run the simulation to see if you were right (up to ${totalPoints} points).`
+            : `Answer every question (up to ${totalPoints} points).`}
         </p>
 
         {questions.map((q, i) => (
@@ -89,13 +93,19 @@ export default function ExperimentPlayer({ experimentType, questions }: Props) {
           </fieldset>
         ))}
 
+        {error && <p role="alert">{error}</p>}
+
         <button
           type="button"
-          disabled={!allAnswered}
-          onClick={() => setPhase("simulation")}
+          disabled={!allAnswered || isSubmitting}
+          onClick={hasSimulation ? () => setPhase("simulation") : handleFinish}
           className="btn-primary w-fit disabled:opacity-50"
         >
-          Go to the simulation
+          {hasSimulation
+            ? "Go to the simulation"
+            : isSubmitting
+              ? "Checking your answers..."
+              : "Submit answers"}
         </button>
       </div>
     );
@@ -103,7 +113,9 @@ export default function ExperimentPlayer({ experimentType, questions }: Props) {
 
   return (
     <div className="flex flex-col gap-6 mt-4">
-      <Simulation type={experimentType} onFinish={handleFinish} />
+      {experimentType && (
+        <Simulation type={experimentType} onFinish={handleFinish} />
+      )}
 
       {isSubmitting && <p>Checking your answers...</p>}
       {error && <p role="alert">{error}</p>}
@@ -111,7 +123,7 @@ export default function ExperimentPlayer({ experimentType, questions }: Props) {
       {phase === "result" && result && (
         <div className="flex flex-col gap-4">
           <p className="text-xl font-bold">
-            +{result.pointsAwarded} / {totalPoints} points
+            {result.pointsAwarded} / {totalPoints} points
           </p>
 
           {questions.map((q, i) => {
@@ -135,8 +147,8 @@ export default function ExperimentPlayer({ experimentType, questions }: Props) {
             );
           })}
 
-          <Link href="/dashboard" className="btn-primary w-fit">
-            Back to dashboard
+          <Link href={backHref ?? "/dashboard"} className="btn-primary w-fit">
+            {backLabel ?? "Back to dashboard"}
           </Link>
         </div>
       )}

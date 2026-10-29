@@ -36,7 +36,9 @@ export default async function ProfilePage() {
         ))}
       </dl>
       <div className="flex justify-end gap-2 mt-4">
-        <Link href="admin" className="btn-secondary">Admin</Link>
+        { user.labels.includes("admin") &&
+          <Link href="admin" className="btn-secondary">Admin</Link>
+        }
         <SignOutButton />
       </div>
     </div>
