@@ -102,14 +102,48 @@ export const getUserScore = async () => {
   }
 };
 
-export const getScores = async (limit = 10) => {
+export const getUserRank = async (score: number) => {
   try {
+    const result = await tablesDB.listRows({
+      databaseId,
+      tableId: scoreTableId,
+      queries: [Query.greaterThan("score", score), Query.limit(1)],
+      ttl: 0,
+    });
+    return result.total + 1;
+  } catch (error: unknown) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getScores = async ({
+  limit = 10,
+  cursor,
+  ttl = 0,
+}: { limit?: number; cursor?: string | null; ttl?: number } = {}) => {
+  try {
+    const queries = [
+      Query.orderDesc("score"),
+      Query.limit(limit + 1), // fetch one extra to know if there's a next page
+    ];
+    if (cursor) queries.push(Query.cursorAfter(cursor));
+
     const result = await tablesDB.listRows<UserScoreResponse>({
       databaseId,
       tableId: scoreTableId,
-      queries: [Query.orderDesc("score"), Query.limit(limit)],
+      queries,
+      ttl,
+      total: false,
     });
-    return JSON.parse(JSON.stringify(result)) as typeof result;
+
+    const plain = JSON.parse(JSON.stringify(result)) as typeof result;
+    const hasMore = plain.rows.length > limit;
+
+    return {
+      rows: hasMore ? plain.rows.slice(0, limit) : plain.rows,
+      hasMore,
+    };
   } catch (error: unknown) {
     console.error(error);
     throw error;

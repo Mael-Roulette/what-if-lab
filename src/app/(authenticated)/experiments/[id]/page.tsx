@@ -1,6 +1,5 @@
 "use client";
 
-import Loading from "@/app/loading";
 import ExperimentPlayer from "@/components/experiments/simulations/experiment-player";
 import { useExperiment } from "@/hooks/experiments/use-experiments";
 import { useQuestions } from "@/hooks/questions/use-questions";
@@ -24,7 +23,12 @@ export default function ExperimentPage() {
     getExperimentQuestions(id);
   }, [id, getExperimentById, getExperimentQuestions]);
 
-  if (experimentLoading || questionLoading) return <Loading />;
+  if (experimentLoading || questionLoading) return (
+     <section className="flex flex-col">
+      <h1 className="text-center">Experiment</h1>
+      <p>Loading...</p>
+    </section>
+  );
 
   const error = experimentError ?? questionError;
   if (error) return <p role="alert">{error}</p>;
