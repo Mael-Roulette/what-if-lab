@@ -150,7 +150,7 @@ export const getScores = async ({
   }
 };
 
-async function addPoints(userId: string, points: number) {
+async function addPoints(userId: string, userName: string, points: number) {
   try {
     const row = await tablesDB.getRow<UserScoreResponse>({
       databaseId: databaseId!,
@@ -161,7 +161,7 @@ async function addPoints(userId: string, points: number) {
       databaseId: databaseId!,
       tableId: scoreTableId!,
       rowId: userId,
-      data: { score: (row.score ?? 0) + points },
+      data: { userName, score: (row.score ?? 0) + points },
     });
     return updated.score;
   } catch (error) {
@@ -170,7 +170,7 @@ async function addPoints(userId: string, points: number) {
       databaseId: databaseId!,
       tableId: scoreTableId!,
       rowId: userId,
-      data: { userId, score: points },
+      data: { userId, userName, score: points },
       permissions: [Permission.read(Role.user(userId))],
     });
     return points;
@@ -203,7 +203,7 @@ export const submitAnswers = async (
   );
 
   const pointsAwarded = results.reduce((sum, r) => sum + r.pointsAwarded, 0);
-  const newScore = pointsAwarded > 0 ? await addPoints(user.$id, pointsAwarded) : null;
+  const newScore = pointsAwarded > 0 ? await addPoints(user.$id, user.name, pointsAwarded) : null;
 
   return { results, pointsAwarded, newScore };
 };
