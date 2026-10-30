@@ -25,7 +25,10 @@ export default function DashboardPage () {
       <p className="italic text-foreground/60 font-bold mb-8">Let&apos;s try new things today.</p>
 
       <div className="flex flex-col gap-3 mb-8">
-        <h2>Experiments</h2>
+        <div className="flex gap-4 items-baseline">
+          <h2>Experiments</h2>
+          <Link href="/experiments" className="link">See more</Link>
+        </div>
         {experimentsLoading ? (
             <p>Loading experiments...</p>
           ) : experimentsError ? (
@@ -44,7 +47,10 @@ export default function DashboardPage () {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2>Questions</h2>
+        <div className="flex gap-4 items-baseline">
+          <h2>Questions</h2>
+          <Link href="/questions" className="link">See more</Link>
+        </div>
         {questionsLoading ? (
             <p>Loading questions...</p>
           ) : questionsError ? (

@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 type QuestionFormFields = {
   question: string;
   correctAnswer: string;
+  options: string[];
   explanation: string;
   points: number;
   experimentId: string;
@@ -18,6 +19,7 @@ type QuestionFormFields = {
 const initialFields: QuestionFormFields = {
   question: "",
   correctAnswer: "",
+  options: [],
   explanation: "",
   points: 0,
   experimentId: "",
@@ -42,6 +44,10 @@ export default function NewQuestionPage() {
       [name]: type === "number" ? (value === "" ? 0 : Number(value)) : value,
     }));
   };
+
+  const handleOptionsChange = (options: string[]) =>{
+    setFields((prev) => ({ ...prev, options }));
+  }
 
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -89,6 +95,7 @@ export default function NewQuestionPage() {
         experiments={experiments}
         questionErrors={questionErrors}
         handleChange={handleChange}
+        onOptionsChange={handleOptionsChange}
         handleSubmit={handleSubmit}
         message={message}
         isSubmitting={isSubmitting}

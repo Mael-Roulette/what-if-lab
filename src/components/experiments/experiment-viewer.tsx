@@ -1,16 +1,16 @@
-import { ExperienceType } from "@/types";
+import { ExperimentType } from "@/types";
 import ProjectileMotion from "./simulations/projectile-motion";
 
 type ExperimentViewerProps = {
-  experienceType: ExperienceType;
+  experimentType: ExperimentType;
 };
 
 export default function ExperimentViewer({
-  experienceType,
+  experimentType,
 }: ExperimentViewerProps) {
   return (
     <div>
-      <p>Selected experience: {experienceType}</p>
+      <p>Selected experience: {experimentType}</p>
 
       <ProjectileMotion />
     </div>

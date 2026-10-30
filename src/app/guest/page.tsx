@@ -12,7 +12,7 @@ export default async function GuestPage () {
       <HomeHeader user={ user } />
 
       <section className="max-w-7xl mx-auto min-h-dvh pt-28 px-6 lg:px-0">
-        <ExperimentViewer experienceType="projectile_motion" />
+        <ExperimentViewer experimentType="projectile_motion" />
       </section>
     </main>
   )

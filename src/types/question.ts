@@ -3,6 +3,7 @@ import { Models } from "appwrite";
 export type QuestionRequest = {
   question: string;
   correctAnswer: string;
+  options: string[];
   explanation: string;
   points: number;
   experimentId: string | null;
