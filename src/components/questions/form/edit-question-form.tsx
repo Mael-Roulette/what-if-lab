@@ -16,6 +16,7 @@ export default function EditQuestionForm({
   const [fields, setFields] = useState<QuestionRequest>({
     question: question.question,
     correctAnswer: question.correctAnswer,
+    options: question.options ?? [],
     explanation: question.explanation,
     points: question.points,
     experimentId: question.experimentId,
@@ -34,7 +35,10 @@ export default function EditQuestionForm({
     }));
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleOptionsChange = (options: string[]) =>
+    setFields((prev) => ({ ...prev, options }));
+
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     await submitQuestion(question.$id, fields);
   };
@@ -45,6 +49,7 @@ export default function EditQuestionForm({
       experiments={experiments}
       questionErrors={errors}
       handleChange={handleChange}
+      onOptionsChange={handleOptionsChange}
       handleSubmit={handleSubmit}
       message={message}
       isSubmitting={isSubmitting}

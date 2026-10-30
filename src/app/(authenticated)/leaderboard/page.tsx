@@ -74,7 +74,7 @@ export default function LeaderboardPage() {
   const myName = myEntry?.userName || "You";
 
   return (
-    <div className="mx-auto max-w-3xl p-4 sm:p-6">
+    <div className="mx-auto max-w-3xl lg:p-6">
       <section className="overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-lg">
         <header className="flex items-center justify-between bg-linear-to-r from-blue to-blue/80 px-5 py-4 text-background">
           <h1>Leaderboard</h1>

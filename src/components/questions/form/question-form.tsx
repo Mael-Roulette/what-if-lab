@@ -7,6 +7,7 @@ export default function QuestionForm (
     experiments,
     questionErrors,
     handleChange,
+    onOptionsChange,
     handleSubmit,
     message,
     isSubmitting,
@@ -16,12 +17,21 @@ export default function QuestionForm (
     experiments: ExperimentResponse[],
     questionErrors: Record<string, string>,
     handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void,
+    onOptionsChange: (options: string[]) => void;
     handleSubmit: (event: React.SubmitEvent<HTMLFormElement>) => void,
     message: string,
     isSubmitting: boolean,
     submitLabel?: string,
     submittingLabel?: string }
 ) {
+  const updateOption = (index: number, value: string) =>
+    onOptionsChange(fields.options.map((o, i) => (i === index ? value : o)));
+
+  const addOption = () => onOptionsChange([...fields.options, ""]);
+
+  const removeOption = (index: number) =>
+    onOptionsChange(fields.options.filter((_, i) => i !== index));
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4 rounded-xl border border-foreground/15 bg-white/60 p-6">
@@ -47,6 +57,33 @@ export default function QuestionForm (
             onChange={handleChange}
             className="w-full"
           />
+        </FormField>
+
+        <FormField label="Options" htmlFor="options" error={questionErrors["options"]}>
+          <div className="space-y-2">
+            {fields.options.map((option, index) => (
+              <div key={index} className="flex gap-2">
+                <input
+                  type="text"
+                  id={index === 0 ? "options" : undefined}
+                  placeholder={`Option ${index + 1}`}
+                  value={option}
+                  onChange={(e) => updateOption(index, e.target.value)}
+                  className="w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeOption(index)}
+                  aria-label={`Remove option ${index + 1}`}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            <button type="button" onClick={addOption}>
+              + Add option
+            </button>
+          </div>
         </FormField>
 
         <FormField label="Explanation" htmlFor="explanation" error={questionErrors["explanation"]}>
